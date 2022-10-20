@@ -1,8 +1,8 @@
 ---
 title: "Phillips Graph"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 date: "2022-10-18"
 ---
 
