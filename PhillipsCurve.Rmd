@@ -1,0 +1,52 @@
+---
+title: "Phillips Graph"
+output: html_document
+date: "2022-10-18"
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+```
+
+```{r load data}
+fredRaw = read.csv("fredgraph.csv")
+fredRaw
+```
+
+```{r select data}
+fred <- fredRaw %>%
+  mutate(year = as.numeric(strtrim(DATE, 4)),
+         month = as.numeric(substring(DATE, 6, 7))) %>%
+  filter(year >= 1959) %>%
+  filter(month == 10)
+
+fred <- transform(fred, prev_cpi = c(NA, CPIAUCSL[-length(CPIAUCSL)]))
+
+fred <- fred %>%
+  mutate(
+    cpi_change = (CPIAUCSL - prev_cpi) / prev_cpi,
+    dec = substr(DATE, 1, 3),
+    ade = "0s",
+    decade = paste(dec, ade, sep = "")
+  ) %>%
+  filter(year >= 1960)
+
+fredSummary <- fred %>%
+  summarise(year, unemployment = as.double(UNRATE), cpi_change, decade)
+fredSummary
+```
+
+```{r graph}
+fredSummary %>%
+  ggplot(aes(x = unemployment, y = cpi_change, color = decade)) +
+  geom_point() +
+  labs(
+    title = "Phillip's Curve",
+    x = "Unemployment Rate",
+    y = "Inflation Rate"
+)
+
+```
+
+
+
