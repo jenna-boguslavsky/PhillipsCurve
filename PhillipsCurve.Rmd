@@ -10,10 +10,9 @@ library(tidyverse)
 
 ```{r load data}
 fredRaw = read.csv("fredgraph.csv")
-fredRaw
 ```
 
-```{r select data}
+```{r calculations}
 fred <- fredRaw %>%
   mutate(year = as.numeric(strtrim(DATE, 4)),
          month = as.numeric(substring(DATE, 6, 7))) %>%
@@ -45,7 +44,6 @@ fredSummary %>%
     x = "Unemployment Rate",
     y = "Inflation Rate"
 )
-
 ```
 
 
